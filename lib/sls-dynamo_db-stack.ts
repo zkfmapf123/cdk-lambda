@@ -1,16 +1,23 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib'
+import * as S3 from 'aws-cdk-lib/aws-s3'
+
+import { Construct } from 'constructs'
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class SlsDynamoDbStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
-    // The code that defines your stack goes here
+    this.connectS3bucket(this)
+  }
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'SlsDynamoDbQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+  private connectS3bucket(params: any) {
+    return new S3.Bucket(params, 'MyBucket', {
+      bucketName: 'sls-basic-engine',
+      blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
+      encryption: S3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      versioned: true,
+    })
   }
 }
